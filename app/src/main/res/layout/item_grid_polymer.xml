@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@android:color/white">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.example.polycloudapp.views.WEqualsHImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:src="@mipmap/polymer"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right|center_vertical"
+            android:layout_margin="@dimen/polymerMarginSize">
+
+            <ImageView
+                android:layout_width="@dimen/polymerVarietyNumImgSize"
+                android:layout_height="@dimen/polymerVarietyNumImgSize"
+                android:src="@mipmap/variety"/>
+
+            <TextView
+                android:id="@+id/tv_material_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="30种"
+                android:textColor="@android:color/holo_orange_dark"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:layout_marginLeft="@dimen/polymerMarginSize"
+                />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_polymer_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="通用塑料"
+        android:textColor="@color/titleColor"
+        android:textSize="@dimen/titleSize"
+        android:padding="@dimen/polymerMarginSize"
+        android:textStyle="bold"/>
+
+</LinearLayout>
