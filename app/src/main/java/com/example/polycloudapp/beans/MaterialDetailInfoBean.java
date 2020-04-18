@@ -5,13 +5,12 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class MaterialDetailInfoBean {
-
     private List<MaterialDetailBean> materialDetail;
     private List<List<String>> rlScatterData;
     private List<List<String>> rlFitData;
-    private List<String> materialUt;
-    private List<String> materialNir;
-    private List<String> materialRaman;
+    private List<List<String>> materialUt;
+    private List<List<String>> materialNir;
+    private List<List<String>> materialRaman;
 
     public List<MaterialDetailBean> getMaterialDetail() {
         return materialDetail;
@@ -37,27 +36,27 @@ public class MaterialDetailInfoBean {
         this.rlFitData = rlFitData;
     }
 
-    public List<String> getMaterialUt() {
+    public List<List<String>> getMaterialUt() {
         return materialUt;
     }
 
-    public void setMaterialUt(List<String> materialUt) {
+    public void setMaterialUt(List<List<String>> materialUt) {
         this.materialUt = materialUt;
     }
 
-    public List<String> getMaterialNir() {
+    public List<List<String>> getMaterialNir() {
         return materialNir;
     }
 
-    public void setMaterialNir(List<String> materialNir) {
+    public void setMaterialNir(List<List<String>> materialNir) {
         this.materialNir = materialNir;
     }
 
-    public List<String> getMaterialRaman() {
+    public List<List<String>> getMaterialRaman() {
         return materialRaman;
     }
 
-    public void setMaterialRaman(List<String> materialRaman) {
+    public void setMaterialRaman(List<List<String>> materialRaman) {
         this.materialRaman = materialRaman;
     }
 
@@ -98,13 +97,13 @@ public class MaterialDetailInfoBean {
         @SerializedName("melting_point")
         private String meltingPoint;
         @SerializedName("melt_index")
-        private String  meltIndex;
+        private String meltIndex;
         @SerializedName("distorion_temp")
         private String distorionTemp;
         @SerializedName("glass_tra_temp")
-        private String  glassTraTemp;
+        private String glassTraTemp;
         @SerializedName("tensile_strength")
-        private String  tensileStrength;
+        private String tensileStrength;
         @SerializedName("tensile_modulus")
         private String tensileModulus;
         @SerializedName("elongation_at_break")
@@ -182,7 +181,7 @@ public class MaterialDetailInfoBean {
             this.meltingPoint = meltingPoint;
         }
 
-        public String  getMeltIndex() {
+        public String getMeltIndex() {
             return meltIndex;
         }
 

@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -51,12 +52,9 @@ public class MaterialDetailActivity extends BaseActivity {
     private TextView mMeltIndex, mHDT, mGlassTraTemp;
     private TextView mTensileStrength, mTensileModulus, mElongationAtBreak, mBendingStrength, mBendingModulus, mImpactStrength, mOthers;
 
-    private LineChart lineChart;
-    private XAxis xAxis;                //X轴
-    private YAxis leftYAxis;            //左侧Y轴
-    private YAxis rightYaxis;           //右侧Y轴
-    private Legend legend;              //图例
-    private LimitLine limitLine;        //限制线
+    private LineChart rlLineChart, utLineChart, nirLineChart, ramanLineChart;
+
+    private TextView mNoOrMethod, mIsManufacturer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +62,7 @@ public class MaterialDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_material_detail);
 
         mContext = this;
+        mPostMaterialNo = getIntent().getStringExtra(MATERIAL_NO);
         initView();
         // 隐藏StatusBar
         // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -71,9 +70,16 @@ public class MaterialDetailActivity extends BaseActivity {
 
     private void initView() {
 
-        initNavBar(true, "材料详情", false);
+        initNavBar(true, mPostMaterialNo, false);
 
-        mPostMaterialNo = getIntent().getStringExtra(MATERIAL_NO);
+        mNoOrMethod = fd(R.id.tv_no_or_method);
+        mIsManufacturer = fd(R.id.is_manufacturer);
+
+        if (mPostMaterialNo.contains("PPC")) {
+
+            mNoOrMethod.setText("方法");
+            mIsManufacturer.setText("配方");
+        }
 
         mMaterialName = fd(R.id.tb1_tv_row1);
         mMaterialNo = fd(R.id.tb1_tv_row2);
@@ -97,6 +103,11 @@ public class MaterialDetailActivity extends BaseActivity {
         mBendingModulus = fd(R.id.tb4_tv_row5);
         mImpactStrength = fd(R.id.tb4_tv_row6);
         mOthers = fd(R.id.tb4_tv_row7);
+
+        rlLineChart = fd(R.id.rheology_line_chart);
+        utLineChart = fd(R.id.ultrasonic_line_chart);
+        nirLineChart = fd(R.id.nir_line_chart);
+        ramanLineChart = fd(R.id.raman_line_chart);
 
         OkHttpClient okHttpClient = new OkHttpClient();
 
@@ -141,18 +152,27 @@ public class MaterialDetailActivity extends BaseActivity {
                         mFeature.setText(result.getMaterialDetail().get(0).getFeature());
                         mApplication.setText(result.getMaterialDetail().get(0).getApplication());
                         mMaterialType.setText(result.getMaterialDetail().get(0).getMaterialType());
-                        mDensity.setText(result.getMaterialDetail().get(0).getDensity());
-                        mMeltPoint.setText(result.getMaterialDetail().get(0).getMeltingPoint());
-                        mMeltIndex.setText(result.getMaterialDetail().get(0).getMeltIndex());
-                        mHDT.setText(result.getMaterialDetail().get(0).getDistorionTemp());
-                        mGlassTraTemp.setText(result.getMaterialDetail().get(0).getGlassTraTemp());
-                        mTensileStrength.setText(result.getMaterialDetail().get(0).getTensileStrength());
-                        mTensileModulus.setText(result.getMaterialDetail().get(0).getTensileModulus());
+                        mDensity.setText(result.getMaterialDetail().get(0).getDensity() + " g/cm3");
+                        mMeltPoint.setText(result.getMaterialDetail().get(0).getMeltingPoint() + " ℃");
+                        mMeltIndex.setText(result.getMaterialDetail().get(0).getMeltIndex() + " g/10min");
+                        mHDT.setText(result.getMaterialDetail().get(0).getDistorionTemp() + " ℃");
+                        mGlassTraTemp.setText(result.getMaterialDetail().get(0).getGlassTraTemp() + " ℃");
+                        mTensileStrength.setText(result.getMaterialDetail().get(0).getTensileStrength() + " MPa");
+                        mTensileModulus.setText(result.getMaterialDetail().get(0).getTensileModulus() + " MPa");
                         mElongationAtBreak.setText(result.getMaterialDetail().get(0).getElongationAtBreak());
-                        mBendingModulus.setText(result.getMaterialDetail().get(0).getBendingModulus());
-                        mBendingStrength.setText(result.getMaterialDetail().get(0).getBendingStrength());
+                        mBendingModulus.setText(result.getMaterialDetail().get(0).getBendingModulus() + " MPa");
+                        mBendingStrength.setText(result.getMaterialDetail().get(0).getBendingStrength() + " MPa");
                         mImpactStrength.setText(result.getMaterialDetail().get(0).getImpactStrength());
                         mOthers.setText(result.getMaterialDetail().get(0).getOthers());
+
+                        initChart(rlLineChart);
+                        showLineChart(rlLineChart, result.getRlFitData(), "流变特性曲线", Color.CYAN, null);
+                        initChart(utLineChart);
+                        showLineChart(utLineChart, result.getMaterialUt(), "超声谱图", Color.CYAN, null);
+                        initChart(nirLineChart);
+                        showLineChart(nirLineChart, result.getMaterialNir(), "近红外谱图", Color.CYAN, LineDataSet.Mode.LINEAR);
+                        initChart(ramanLineChart);
+                        showLineChart(ramanLineChart, result.getMaterialRaman(), "拉曼光谱图", Color.CYAN, LineDataSet.Mode.LINEAR);
                     }
                 });
             }
@@ -163,17 +183,30 @@ public class MaterialDetailActivity extends BaseActivity {
      * 初始化图表
      */
     private void initChart(LineChart lineChart) {
+
+        XAxis xAxis;                //X轴
+        YAxis leftYAxis;            //左侧Y轴
+        YAxis rightYaxis;           //右侧Y轴
+        Legend legend;              //图例
+        LimitLine limitLine;        //限制线
+
         /**图表设置***/
-        // 是否展示网格线
+        // 是否展示网格线背景
         lineChart.setDrawGridBackground(false);
         // 是否显示边界
         lineChart.setDrawBorders(true);
         // 是否可以拖动
         lineChart.setDragEnabled(false);
-        // 是否有触摸事件
+        // 缩放
+        lineChart.setScaleEnabled(true);
+        // XY同时缩放
+        lineChart.setPinchZoom(true);
+        // 双击缩放
+        lineChart.setDoubleTapToZoomEnabled(true);
+        // 是否可以触摸
         lineChart.setTouchEnabled(true);
         // 设置XY轴动画效果
-        lineChart.animateY(2500);
+        lineChart.animateY(1500);
         lineChart.animateX(1500);
 
         /***XY轴的设置***/
@@ -188,18 +221,9 @@ public class MaterialDetailActivity extends BaseActivity {
         // leftYAxis.setAxisMinimum(0f);
         // rightYaxis.setAxisMinimum(0f);
 
-        /***折线图例 标签 设置**
+        // 折线图例 标签 设置
         legend = lineChart.getLegend();
-        //设置显示类型，LINE CIRCLE SQUARE EMPTY 等等 多种方式，查看LegendForm 即可
-        legend.setForm(Legend.LegendForm.LINE);
-        legend.setTextSize(12f);
-        //显示位置 左下方
-        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
-        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        //是否绘制在图表里面
-        legend.setDrawInside(false);
-         */
+        legend.setEnabled(false);
     }
 
     /**
@@ -214,14 +238,15 @@ public class MaterialDetailActivity extends BaseActivity {
         lineDataSet.setColor(color);
         lineDataSet.setCircleColor(color);
         lineDataSet.setLineWidth(1f);
-        lineDataSet.setCircleRadius(3f);
+        lineDataSet.setCircleRadius(1f);
         // 设置曲线值的圆点是实心还是空心
         lineDataSet.setDrawCircleHole(false);
         lineDataSet.setValueTextSize(10f);
         // 设置折线图填充
-        lineDataSet.setDrawFilled(true);
+        lineDataSet.setDrawFilled(false);
         lineDataSet.setFormLineWidth(1f);
         lineDataSet.setFormSize(15.f);
+        lineDataSet.setDrawValues(true);
         if (mode == null) {
             // 设置曲线展示为圆滑曲线（如果不设置则默认折线）
             lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
@@ -237,20 +262,17 @@ public class MaterialDetailActivity extends BaseActivity {
      * @param name     曲线名称
      * @param color    曲线颜色
      */
-    public void showLineChart(List<?> dataList, String name, int color) {
+    public void showLineChart(LineChart lineChart, List<List<String>> dataList, String name, int color, LineDataSet.Mode mode) {
         List<Entry> entries = new ArrayList<>();
         for (int i = 0; i < dataList.size(); i++) {
-            // IncomeBean data = dataList.get(i);
-            /**
-             * 在此可查看 Entry构造方法，可发现 可传入数值 Entry(float x, float y)
-             * 也可传入Drawable， Entry(float x, float y, Drawable icon) 可在XY轴交点 设置Drawable图像展示
-             */
-            // Entry entry = new Entry(i, (float) data.getValue());
-            // entries.add(entry);
+
+            List<String> data = dataList.get(i);
+            Entry entry = new Entry(Float.parseFloat(data.get(0)), Float.parseFloat(data.get(1)));
+            entries.add(entry);
         }
         // 每一个LineDataSet代表一条线
         LineDataSet lineDataSet = new LineDataSet(entries, name);
-        initLineDataSet(lineDataSet, color, LineDataSet.Mode.LINEAR);
+        initLineDataSet(lineDataSet, color, mode);
         LineData lineData = new LineData(lineDataSet);
         lineChart.setData(lineData);
     }
