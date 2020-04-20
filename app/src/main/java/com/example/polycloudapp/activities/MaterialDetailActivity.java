@@ -182,7 +182,7 @@ public class MaterialDetailActivity extends BaseActivity {
     /**
      * 初始化图表
      */
-    private void initChart(LineChart lineChart) {
+    public void initChart(LineChart lineChart) {
 
         XAxis xAxis;                //X轴
         YAxis leftYAxis;            //左侧Y轴
@@ -233,7 +233,7 @@ public class MaterialDetailActivity extends BaseActivity {
      * @param color       线条颜色
      * @param mode
      */
-    private void initLineDataSet(LineDataSet lineDataSet, int color, LineDataSet.Mode mode) {
+    public void initLineDataSet(LineDataSet lineDataSet, int color, LineDataSet.Mode mode) {
 
         lineDataSet.setColor(color);
         lineDataSet.setCircleColor(color);

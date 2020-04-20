@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.CompositionMonitorActivity">
+
+    <include layout="@layout/nav_bar"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="@dimen/marginSize"
+            android:layout_marginLeft="@dimen/marginSize"
+            android:layout_marginBottom="@dimen/marginSize">
+
+            <View
+                android:layout_width="4dp"
+                android:layout_height="22dp"
+                android:background="@color/mainColor"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="实时近红外谱图"
+                android:textColor="@color/titleColor"
+                android:textSize="@dimen/titleSize"
+                android:textStyle="bold"
+                android:layout_marginLeft="@dimen/marginTabSize"/>
+
+        </LinearLayout>
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/nir_online_chart"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="@dimen/marginSize"
+            android:layout_marginLeft="@dimen/marginSize"
+            android:layout_marginBottom="@dimen/marginSize">
+
+            <View
+                android:layout_width="4dp"
+                android:layout_height="22dp"
+                android:background="@color/mainColor"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="在线组分含量监测结果"
+                android:textColor="@color/titleColor"
+                android:textSize="@dimen/titleSize"
+                android:textStyle="bold"
+                android:layout_marginLeft="@dimen/marginTabSize"/>
+
+        </LinearLayout>
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/composition_online_monitor_chart"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"/>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marginSize"
+            android:gravity="center">
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="测试材料: "
+                    android:textSize="@dimen/titleSize"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TPU改性PPC"
+                    android:textSize="@dimen/titleSize"/>
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tb_result_row1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="当前TPU含量（%）: "
+                    android:textSize="@dimen/titleSize"/>
+
+                <TextView
+                    android:id="@+id/tb_result_tv_row1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="@dimen/titleSize"/>
+
+            </TableRow>
+
+        </TableLayout>
+
+        <Button
+            style="@style/commitBtn"
+            android:text="获取检测结果"
+            android:layout_marginTop="28dp"
+            android:onClick="onGetMonitorDataClick"/>
+
+    </LinearLayout>
+
+</LinearLayout>

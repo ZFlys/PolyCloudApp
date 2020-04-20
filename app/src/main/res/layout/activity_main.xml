@@ -19,12 +19,31 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <com.github.florent37.awesomebar.AwesomeBar
+                android:id="@+id/awesomeBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                app:bar_primaryColor="@android:color/holo_blue_light"
+                app:bar_primaryDarkColor="@android:color/holo_blue_dark"
+                android:elevation="4dp"/>
+
+            <scut.carson_ho.searchview.SearchView
+                android:id="@+id/search_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:textSizeSearch="5dp"
+                app:textColorSearch="#3F51B5"
+                app:textHintSearch="输入牌号/代号查询"
+                app:searchBlockHeight="150"
+                app:searchBlockColor="#ffffff"
+                />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:layout_marginTop="@dimen/marginSize"
                 android:layout_marginLeft="@dimen/marginSize"
                 android:layout_marginBottom="@dimen/marginSize">
 

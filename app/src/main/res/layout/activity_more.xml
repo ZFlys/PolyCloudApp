@@ -6,16 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activities.UserActivity">
+    tools:context=".activities.MoreActivity">
 
     <include layout="@layout/nav_bar"/>
 
     <TextView
-        android:id="@+id/tv_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="用户名: "
+        android:text="更 多 功 能"
         android:textSize="@dimen/titleSize"
         android:textStyle="bold"
         android:layout_marginTop="@dimen/marginSize"/>
@@ -24,18 +23,11 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/itemHeight"
         android:layout_marginTop="@dimen/marginSize"
-        android:text="修改密码"
+        android:text="组分含量实时监测"
         android:textSize="@dimen/titleSize"
         android:paddingLeft="@dimen/marginSize"
         android:gravity="center_vertical"
-        android:onClick="onChangePasswordClick"
+        android:onClick="onCompositionMonitorClick"
         android:background="@drawable/item_commit_select"/>
-
-    <Button
-        style="@style/commitBtn"
-        android:text="退出登录"
-        android:layout_marginTop="500dp"
-        android:onClick="onLogoutClick"
-        />
 
 </LinearLayout>
