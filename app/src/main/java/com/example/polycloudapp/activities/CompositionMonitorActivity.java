@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.polycloudapp.R;
@@ -41,6 +42,7 @@ public class CompositionMonitorActivity extends BaseActivity {
 
     private LineChart nirOnlineChart, compositionOnlineMonitorChart;
     private TextView mMonitorResult;
+    private Button mMonitorCommitButton;
 
     private Thread mThread;
     private Handler mHandler;
@@ -59,6 +61,7 @@ public class CompositionMonitorActivity extends BaseActivity {
 
         initNavBar(true, "组分含量监测", false);
 
+        mMonitorCommitButton = (Button) fd(R.id.monitor_commit_button);
         mMonitorResult = fd(R.id.tb_result_tv_row1);
 
         nirOnlineChart = fd(R.id.nir_online_chart);
@@ -74,10 +77,12 @@ public class CompositionMonitorActivity extends BaseActivity {
      */
     public void onGetMonitorDataClick(View view) {
 
+        // TODO Activity关闭后结束当前线程
+
         mThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                int xPoint = 0;
+                int xPoint = 1;
                 while (true) {
                     try {
                         Thread.sleep(1000);
@@ -124,6 +129,7 @@ public class CompositionMonitorActivity extends BaseActivity {
         });
 
         mThread.start();
+        mMonitorCommitButton.setEnabled(false);
     }
 
     /**
